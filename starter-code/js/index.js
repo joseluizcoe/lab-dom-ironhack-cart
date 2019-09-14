@@ -11,7 +11,11 @@ function updatePriceByProduct(productPrice, index){
 }
 
 function getTotalPrice() {
-
+  let total = document.querySelector('.total>span');
+  let quantity = document.querySelector('.quantity>span>input').value;
+  let price = document.querySelector('.price>span').innerText;
+  let productTotalPrice = (quantity * price);
+  total.innerText = parseFloat(productTotalPrice).toFixed(2);
 }
 
 function createQuantityInput(){
