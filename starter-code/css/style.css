@@ -39,3 +39,9 @@ input {
 .quantity {
   margin: 0 5px;
 }
+
+.product {
+  width : 80%;
+  display: flex;
+  justify-content: space-between
+}
