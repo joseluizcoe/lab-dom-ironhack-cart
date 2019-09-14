@@ -40,8 +40,17 @@ input {
   margin: 0 5px;
 }
 
+.products {
+  margin-bottom : 40px;
+}
+
 .product {
   width : 80%;
   display: flex;
   justify-content: space-between
+}
+
+.product-list-actions {
+  display: flex;
+  justify-content: center;
 }
