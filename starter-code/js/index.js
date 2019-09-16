@@ -1,7 +1,12 @@
+function query(selector) {
+  let selectors = document.querySelectorAll(selector);
+  return selectors;
+}
+
 function deleteItem(event){
   let thisProduct = event.target.parentElement.parentNode;
   thisProduct.remove();
-  getTotalPrice();
+  uptateTotalPrice();
 }
 
 function getPriceByProduct(itemNode){
@@ -12,16 +17,16 @@ function updatePriceByProduct(productPrice, index){
 
 }
 
-function getTotalPrice() {
-  let allProducts = document.querySelectorAll('.product');
-  let fullPriceElement = document.querySelector('.full-price');
+function uptateTotalPrice() {
+  let allProducts = query('.product');
+  let fullPriceElement = query('.full-price')[0];
   
   let totalPrice = 0;
   // Para cada produto
-  allProducts.forEach(function(product) {
+  allProducts.forEach(function(product, index) {
     let totalElement = product.querySelector('.total>span');
-    let quantityElement = product.querySelector('.quantity>span>input');
-    let priceElement = product.querySelector('.price>span');
+    let quantityElement = product.querySelector('.quantity>span>input') || 0;
+    let priceElement = product.querySelector('.price>span') || 0.00;
     
     let quantityValue = quantityElement.value;
     let priceValue = priceElement.innerText;
@@ -36,46 +41,137 @@ function getTotalPrice() {
 }
 
 function createQuantityInput(){
+  /*  <div class="quantity">
+        <span>
+          <label>QTY</label>
+          <input name="quant" />
+        </span>
+      </div>
+  */
 
+  let span = document.createElement('span');
+  let label = document.createElement('label');
+  let input = document.createElement('input');
+
+  input.setAttribute('name', 'quant');
+  input.setAttribute('type', 'number');
+  label.innerText = "QTY";
+  span.appendChild(label);
+  span.appendChild(input);
+
+  return span;
 }
 
 function createDeleteButton(){
+  /*
+  <div class="product-actions">
+    <button class="btn btn-delete">Delete</button>
+  </div>
+  */
 
+  let button = document.createElement('button');
+  let div = document.createElement('div');
+  div.setAttribute('class', 'product-actions')
+  button.setAttribute('class', 'btn btn-delete');
+  button.innerText = 'Delete';
+
+  div.appendChild(button);
+  
+  return div;
 }
 
 function createQuantityNode(){
 
+  let quantityColumn = document.createElement('div');
+  let input = createQuantityInput();
+  quantityColumn.setAttribute('class', 'quantity');
+  quantityColumn.appendChild(input);
+  return quantityColumn;
 }
 
-function createItemNode(dataType, itemData){
+
+function createTitleNode(itemName) {
+    // title
+    let titleDiv = document.createElement('div');
+    let titleSpan = document.createElement('span');
+    titleDiv.setAttribute('class', 'title');
+    titleSpan.innerText = itemName;
+    titleDiv.appendChild(titleSpan);
+    return titleDiv;
+}
+
+function createPriceNode(itemUnitPrice) {
+  /* 
+    <div class="price">
+      $<span>${itemUnitPrice}</span>
+    </div>
+  */
+  let priceSpan = document.createElement('span');
+  priceSpan.innerText = itemUnitPrice;
+  
+  let priceDiv = document.createElement('div');
+  priceDiv.setAttribute('class', 'price');
+  priceDiv.innerHTML='$';
+  priceDiv.appendChild(priceSpan);
+  
+  return priceDiv;
+}
+
+function createTotalNode() {
+  /* <div class="total">$<span>0.00</span></div> */
+
+  let totalDiv = document.createElement('div');
+  totalDiv.setAttribute('class', 'total');
+  totalDiv.innerHTML = `$<span>0.00</span>`;
+ 
+  return totalDiv;
+
 }
 
 function createNewItemRow(itemName, itemUnitPrice){
-  console.log('itemName',itemName);
-  console.log('itemUnitPrice',itemUnitPrice);
-  let productList = document.querySelector('.products');
-  let product = productList.querySelector('.product').innerHTML;
-  productList.appendChild(product);
+  let newItemRow = document.createElement('div');
+  let titleDiv = createTitleNode(itemName);
+  let priceDiv = createPriceNode(itemUnitPrice);
+  let quantityDiv =  createQuantityNode();
+  let totalDiv = createTotalNode();
+  let deleteDiv = createDeleteButton();
+  
+  newItemRow.setAttribute('class', 'product');
+  newItemRow.appendChild(titleDiv);
+  newItemRow.appendChild(priceDiv);
+  newItemRow.appendChild(quantityDiv);
+  newItemRow.appendChild(quantityDiv);
+  newItemRow.appendChild(totalDiv);
+  newItemRow.appendChild(deleteDiv);
+
+  return newItemRow;
 
 }
 
 function createNewItem(){
-  let productNameElement = document.querySelector('.add-product input[name="title"]');
-  let productPriceElement = document.querySelector('.add-product input[name="price"]');
-  let itemName = productNameElement.value;
-  let itemUnitPrice = productPriceElement.value;
-  createNewItemRow(itemName, itemUnitPrice);
+  let productList = query('.products')[0];
+  let newItemName = query('.add-product input[name="title"]')[0].value || 'Novo Produto';
+  let newItemPrice = query('.add-product input[name="price"]')[0].value || 1.00;
+  let newRow = createNewItemRow(newItemName, newItemPrice);
+  productList.appendChild(newRow);
+  updateDeleteButtonBehavior();
+}
+
+
+function updateDeleteButtonBehavior() {
+  let deleteButtons = document.getElementsByClassName('btn-delete');
+  for(let i = 0; i<deleteButtons.length ; i++){
+    deleteButtons[i].onclick = deleteItem;
+  }
 }
 
 window.onload = function(){
-  var calculatePriceButton = document.getElementById('calc-prices-button');
-  var createItemButton = document.getElementById('new-item-create');
-  var deleteButtons = document.getElementsByClassName('btn-delete');
+  let calculatePriceButton = document.getElementById('calc-prices-button');
+  let createItemButton = document.getElementById('new-item-create');
 
-  calculatePriceButton.onclick = getTotalPrice;
+  calculatePriceButton.onclick = uptateTotalPrice;
   createItemButton.onclick = createNewItem;
 
-  for(var i = 0; i<deleteButtons.length ; i++){
-    deleteButtons[i].onclick = deleteItem;
-  }
+  updateDeleteButtonBehavior();
+  uptateTotalPrice();
 };
