@@ -44,13 +44,20 @@ input {
   margin-bottom : 40px;
 }
 
+.add-product,
 .product {
   width : 80%;
   display: flex;
-  justify-content: space-between
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .product-list-actions {
   display: flex;
   justify-content: center;
+}
+
+.add-product {
+  border : 1px solid #eee;
+  padding: 20px 10px;
 }
