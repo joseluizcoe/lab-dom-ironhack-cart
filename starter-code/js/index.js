@@ -4,6 +4,13 @@ function deleteItem(event){
   uptateTotalPrice();
 }
 
+function updateDeleteButtonBehavior() {
+  let deleteButtons = document.getElementsByClassName('btn-delete');
+  for(let i = 0; i<deleteButtons.length ; i++){
+    deleteButtons[i].onclick = deleteItem;
+  }
+}
+
 function getPriceByProduct(itemNode){
   return itemNode.querySelector('.price>span') || 0.00;
 }
@@ -156,14 +163,6 @@ function createNewItem(){
 
   productList.appendChild(newRow);
   updateDeleteButtonBehavior();
-}
-
-
-function updateDeleteButtonBehavior() {
-  let deleteButtons = document.getElementsByClassName('btn-delete');
-  for(let i = 0; i<deleteButtons.length ; i++){
-    deleteButtons[i].onclick = deleteItem;
-  }
 }
 
 window.onload = function(){
