@@ -36,6 +36,37 @@ input {
     border-color: #CF000F;
 }
 
-.quantity {
-  margin: 0 5px;
+
+.products {
+  margin-bottom : 40px;
+}
+
+.product .title,
+.product .price,
+.product .quantity,
+.product .total {
+  min-width: 150px;
+}
+
+.add-product,
+.product {
+  width : 80%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.product-list-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.add-product {
+  border : 1px solid #eee;
+  padding: 20px 10px;
+}
+
+section.total-price {
+  display: flex;
+  justify-content: center;
 }
